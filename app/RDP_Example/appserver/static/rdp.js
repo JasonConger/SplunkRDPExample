@@ -14,7 +14,7 @@ require([
             
             var server = cell.value;
             
-            $td.html(_.template('<a href="/custom/TemplateForXenApp/rdp/connect?server=<%- server%>" title="RDP to server: <%- server%>"><img src="/static/app/TemplateForXenApp/images/rdp.png" /></a> <%- server%>', {
+            $td.html(_.template('<a href="/custom/RDP_Example/rdp/connect?server=<%- server%>" title="RDP to server: <%- server%>"><img src="/static/app/RDP_Example/images/rdp.png" /></a> <%- server%>', {
                 server: server
             }));
         }
