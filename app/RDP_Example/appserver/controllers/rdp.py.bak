@@ -1,0 +1,86 @@
+import cherrypy
+import splunk.appserver.mrsparkle.controllers as controllers
+from splunk.appserver.mrsparkle.lib.decorators import expose_page
+from splunk.appserver.mrsparkle.lib.routes import route
+
+import splunk
+import splunk.admin as admin
+import splunk.entity as en
+
+class ReportError(Exception):
+	def __init__(self, code, response):
+		self.code = code
+		self.response = response
+
+	def __repr__(self):
+		return "(%s) %s" % (self.code, self.response)
+
+	def __str__(self):
+		return repr(self)
+
+class RDPController(controllers.BaseController):
+
+	@expose_page(must_login=True, methods=['GET'])
+    def header_echo(self, **kwargs):
+        cherrypy.response.headers['Content-Type'] = 'text/plain'
+        output = []
+        for k,v in cherrypy.request.headers.items():
+            output.append('%s: %s' % (k, v))
+        return '\n'.join(output)
+
+	@expose_page(must_login=True, methods=['GET'])
+	def connect(self, **kwargs):
+		response = self.response
+		request = self.request
+		self.settings = settings = splunk.clilib.cli_common.getConfStanza('rdp_settings', 'default')
+		form = request['query']
+		
+		server = form.get('server')
+		if not server:
+			raise ReportError(400, "No server specified")
+			
+		administrative_session = settings.get('administrative_session')
+		if not administrative_session:
+			administrative_session = "1"
+			
+		audiomode = settings.get('audiomode')
+		if not audiomode:
+			audiomode = "2"
+			
+		desktopwidth = settings.get('desktopwidth')
+		if not desktopwidth:
+			desktopwidth = "1436"
+			
+		desktopheight = settings.get('desktopheight')
+		if not desktopheight:
+			desktopheight = "925"
+			
+		domain = form.get('domain')
+		if not domain:
+			domain = settings.get('domain')
+			if not domain:
+				domain = ""
+				
+		server_port = settings.get('server_port')
+		if not server_port:
+			server_port = "0xD3D"
+
+		rdp_content = """administrative session:i:{administrative_session}
+audiomode:i:{audiomode}
+desktopwidth:i:{desktopwidth}
+desktopheight:i:{desktopheight}
+domain:s:{domain}
+full address:s:{full_address}
+server port:i:{server_port}""".format(
+		administrative_session = administrative_session,
+		audiomode = audiomode,
+		desktopwidth = desktopwidth,
+		desktopheight = desktopheight,
+		domain = domain,
+		full_address = server,
+		server_port = server_port)
+
+		cherrypy.response.headers["Content-Disposition"] = "attachment; filename=connect.rdp"
+		cherrypy.response.headers["Content-Type"] = "application/rdp"
+		return rdp_content
+

@@ -1,0 +1,7 @@
+host,OS,IPAddress
+Server-01,Microsoft Windows Server 2008 R2 Standard,192.168.1.100
+Server-02,Microsoft Windows Server 2008 R2 Standard,192.168.1.101
+Server-03,Microsoft Windows Server 2008 R2 Standard,192.168.1.102
+Server-04,Microsoft Windows Server 2008 R2 Standard,192.168.1.103
+Server-05,Microsoft Windows Server 2008 R2 Standard,192.168.1.104
+Server-06,Microsoft Windows Server 2008 R2 Standard,192.168.1.105

@@ -1,0 +1,42 @@
+<dashboard script="rdp.js">
+  <label>RDP Example</label>
+  
+  <row>
+	<html>
+		<p>
+			This is an example dashboard that demonstrates how to add a RDP icon to a table.
+			Clicking the icon will initiate a RDP session to the selected server.
+		</p>
+		<p>
+			The search in this example is using a lookup file called servers.csv for demonstration purposes.
+			Normally, you would use a "real" search, but this should get you started in the right direction.
+		</p>
+		<p>
+			For a more detailed explanation on how all of this works, check out this blog post ->
+			<a href="http://blogs.splunk.com/2014/07/31/rdp-to-windows-server-from-a-splunk-dashboard/" target="_blank">http://blogs.splunk.com/2014/07/31/rdp-to-windows-server-from-a-splunk-dashboard/</a>
+		</p>
+	</html>
+  </row>
+
+  <row>
+    <table id="tblServers">
+      <title>Servers</title>
+      <searchString>
+		| inputlookup servers.csv |
+		table host OS IPAddress |
+		sort host |
+		rename host AS Server OS AS "Operating System" IPAddresses AS "IP Address"
+      </searchString>
+      
+      <drilldown>
+        <link>
+          <![CDATA[
+			/custom/RDP_Example/rdp/connect?server=$row.Server$
+          ]]>
+         </link>
+     </drilldown>
+      
+    </table>
+  </row>  
+  
+</dashboard>

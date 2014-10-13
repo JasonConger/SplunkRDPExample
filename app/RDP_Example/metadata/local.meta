@@ -1,0 +1,23 @@
+[views/load]
+owner = admin
+version = 6.0.2
+modtime = 1394634457.611185000
+
+[views/user_activity]
+version = 6.0.2
+modtime = 1394634482.970149000
+
+[props/xendesktop%3A7%3Asession/EXTRACT-machine_name2]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = admin
+version = 6.0.2
+modtime = 1394658526.815550000
+
+[views/environment_overview]
+version = 6.1.1
+modtime = 1405020463.914049400
+
+[html/session-user]
+version = 6.1.1
+modtime = 1405705780.900166700
